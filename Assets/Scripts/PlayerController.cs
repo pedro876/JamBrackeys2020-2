@@ -58,7 +58,6 @@ public class PlayerController : MonoBehaviour
             jumping = true;
             jumpTime = 0f;
             rb.AddForce(transform.up * jumpForce, ForceMode.VelocityChange);
-            Debug.Log("Jump");
         }
     }
 

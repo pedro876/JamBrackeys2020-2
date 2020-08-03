@@ -10,4 +10,11 @@ public class GameManager : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
+
+    public static float SmoothStep(float edge0, float edge1, float value)
+    {
+        value = Mathf.Clamp((value - edge0) / (edge1 - edge0), 0f, 1f);
+        value = value * value * (3f - 2f * value);
+        return value;
+    }
 }
