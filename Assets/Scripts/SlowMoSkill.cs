@@ -9,6 +9,9 @@ public class SlowMoSkill : MonoBehaviour
 {
     [Header("Slow Motion")]
     [SerializeField] Transform cam;
+    [SerializeField] Transform revolver;
+    CapsuleCollider cld;
+    Rigidbody rb;
     [SerializeField] [Range(0f, 1f)] float lerp = 1f;
     [SerializeField] float slowMoMaxTime = 10f;     float slowMoTime = 0f;
     [SerializeField] float regressionMaxTime = 2f;  float regressionTime = 0f;
@@ -22,6 +25,11 @@ public class SlowMoSkill : MonoBehaviour
     List<Vector3> positions;
     List<Quaternion> playerRotations;
     List<Quaternion> camRotations;
+    List<Vector3> revolverPositions;
+    List<Quaternion> revolverRotations;
+
+    Vector3 lastVelocity = Vector3.zero;
+    Vector3 lastAngularVelocity = Vector3.zero;
 
     bool isRewinding = false;
     bool slowMoActive = false;
@@ -53,26 +61,41 @@ public class SlowMoSkill : MonoBehaviour
         positions = new List<Vector3>();
         playerRotations = new List<Quaternion>();
         camRotations = new List<Quaternion>();
+        revolverPositions = new List<Vector3>();
+        revolverRotations = new List<Quaternion>();
+
         volume.profile.TryGet(out lensDistorsion);
         volume.profile.TryGet(out colorAdjustments);
+        cld = GetComponent<CapsuleCollider>();
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("UseSlowMo") && !slowMoActive && canSlowMo)
+        if (Input.GetButtonDown("UseSlowMo"))
         {
-            positions.Clear();
-            playerRotations.Clear();
-            camRotations.Clear();
-            canSlowMo = false;
-            slowMoActive = true;
-            slowMoTime = 0f;
-            regressionTime = 0f;
-            coolDownTime = 0f;
-            isRewinding = false;
-            startSkill.Invoke();
-            
+            if(!slowMoActive && canSlowMo)
+            {
+                positions.Clear();
+                playerRotations.Clear();
+                camRotations.Clear();
+                revolverPositions.Clear();
+                revolverRotations.Clear();
+                canSlowMo = false;
+                slowMoActive = true;
+                slowMoTime = 0f;
+                regressionTime = 0f;
+                coolDownTime = 0f;
+                isRewinding = false;
+                startSkill.Invoke();
+                lastAngularVelocity = rb.angularVelocity;
+                lastVelocity = rb.velocity;
+            }
+            else if (slowMoActive)
+            {
+                slowMoTime = regressionE0 * slowMoMaxTime;
+            }
         }
 
         SkillTimers();
@@ -89,6 +112,8 @@ public class SlowMoSkill : MonoBehaviour
             positions.Add(transform.position);
             playerRotations.Add(transform.rotation);
             camRotations.Add(cam.rotation);
+            revolverPositions.Add(revolver.position);
+            revolverRotations.Add(revolver.rotation);
         }
         else if (isRewinding)
         {
@@ -98,6 +123,8 @@ public class SlowMoSkill : MonoBehaviour
                 transform.position = Vector3.Lerp(transform.position, positions[index], lerp);
                 transform.rotation = Quaternion.Lerp(transform.rotation, playerRotations[index], lerp);
                 cam.rotation = Quaternion.Lerp(cam.rotation, camRotations[index], lerp);
+                revolver.position = Vector3.Lerp(revolver.position, revolverPositions[index], lerp);
+                revolver.rotation = Quaternion.Lerp(revolver.rotation, revolverRotations[index], lerp);
             }
         }
     }
@@ -135,6 +162,8 @@ public class SlowMoSkill : MonoBehaviour
                 slowMoActive = false;
                 isRewinding = true;
                 startRewind.Invoke();
+                cld.isTrigger = true;
+                rb.isKinematic = true;
             }
         }
         else if (isRewinding)
@@ -151,6 +180,10 @@ public class SlowMoSkill : MonoBehaviour
                     cam.rotation = camRotations[0];
                     startCooldown.Invoke();
                 }
+                cld.isTrigger = false;
+                rb.isKinematic = false;
+                rb.velocity = lastVelocity;
+                rb.angularVelocity = lastAngularVelocity;
             }
         }
         else if (!canSlowMo)

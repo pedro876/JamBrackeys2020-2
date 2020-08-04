@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FreezeInTime : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class FreezeInTime : MonoBehaviour
     Vector3 angularVelocity = Vector3.zero;
     Rigidbody rb;
     [SerializeField] bool frozen = false;
+    [SerializeField] UnityEvent OnFreeze;
+    [SerializeField] UnityEvent OnUnFreeze;
     
     // Start is called before the first frame update
     void Start()
@@ -32,18 +35,21 @@ public class FreezeInTime : MonoBehaviour
 
     public void Freeze()
     {
+        frozen = true;
+        if(OnFreeze != null) OnFreeze.Invoke();
         if (rb)
         {
-            frozen = true;
             rb.isKinematic = true;
         }
+
     }
 
     public void UnFreeze()
     {
+        frozen = false;
+        if(OnUnFreeze != null) OnUnFreeze.Invoke();
         if (rb)
         {
-            frozen = false;
             rb.isKinematic = false;
             rb.velocity = velocity;
             rb.angularVelocity = angularVelocity;

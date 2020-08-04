@@ -5,17 +5,19 @@ using UnityEngine;
 public class WeaponController : MonoBehaviour
 {
     [SerializeField] GameObject bullet;
-    [SerializeField] Transform cylinder;
+    [SerializeField] Transform tambor;
     [SerializeField] Transform bulletSpawn;
     [SerializeField] Transform target;
-    Transform camera;
+    Animator anim;
+    Transform cam;
     [SerializeField] int maxAmmo = 6;
     int ammo = 6;
     bool canShoot = false;
     bool loadingBullet = false;
     [SerializeField] float loadingMaxTime = 0.2f;
     float loadingTime = 0f;
-    //float lastDegree = 0f;
+    Quaternion lastRot;
+    //Quaternion desiredRot;
     [SerializeField] float normalLerp = 0.9f;
     Vector3 lastNormal;
     [SerializeField] float rayMaxDist = 10f;
@@ -27,10 +29,13 @@ public class WeaponController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        camera = Camera.main.transform;
-        lastNormal = -camera.forward;
+        cam = Camera.main.transform;
+        lastNormal = -cam.forward;
         revolverMat.SetColor("_EmissionColor", Color.black);
         tamborMat.SetColor("_EmissionColor", Color.black);
+        //desiredRot = cylinder.rotation;
+        lastRot = tambor.localRotation;
+        anim = GetComponentInChildren<Animator>();
     }
 
     private void FixedUpdate()
@@ -43,6 +48,19 @@ public class WeaponController : MonoBehaviour
 
     public void TurnOnOff(bool on) { turnedOn = on ? 1f : 0f; }
 
+    IEnumerator ShootBullet()
+    {
+        yield return new WaitForSeconds(6f / 30f);
+        GameObject newBullet = Instantiate(bullet);
+        newBullet.transform.position = bulletSpawn.position;
+        newBullet.transform.LookAt(target.position);
+        ammo--;
+        if (ammo == 0) TurnOnOff(false);
+        loadingBullet = true;
+        loadingTime = 0f;
+        lastRot = tambor.localRotation;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -50,13 +68,9 @@ public class WeaponController : MonoBehaviour
         
         if (Input.GetButtonDown("Fire1") && canShoot && ammo > 0 && !loadingBullet)
         {
-            GameObject newBullet = Instantiate(bullet);
-            newBullet.transform.position = bulletSpawn.position;
-            newBullet.transform.LookAt(target.position);
-            ammo--;
-            if (ammo == 0) TurnOnOff(false);
-            loadingBullet = true;
-            loadingTime = 0f;
+            StartCoroutine("ShootBullet");
+            //desiredRot = Quaternion.Euler(lastRot.eulerAngles + new Vector3(0f, 0f, -60f));
+            anim.SetTrigger("shoot");
             Debug.Log("shoot");
         }
 
@@ -64,19 +78,27 @@ public class WeaponController : MonoBehaviour
         {
             loadingTime += Time.deltaTime;
 
+            float degrees = GameManager.SmoothStep(0f, 1f, loadingTime / loadingMaxTime) * 60f;
+            tambor.localRotation = lastRot;
+            tambor.RotateAround(tambor.position, -tambor.up, degrees);
+            //cylinder.rotation = Quaternion.Lerp(lastRot, desiredRot, loadingTime / loadingMaxTime);
+
             if(loadingTime > loadingMaxTime)
             {
                 loadingBullet = false;
             }
         }
+
+        Vector3 nextRot = transform.rotation.eulerAngles;
+        
     }
 
     private void UpdateTarget()
     {
         RaycastHit hit;
-        target.position = camera.position + camera.forward * rayMaxDist;
-        Vector3 targetForward = camera.forward;
-        if(Physics.Raycast(camera.position, camera.forward, out hit, rayMaxDist))
+        target.position = cam.position + cam.forward * rayMaxDist;
+        Vector3 targetForward = cam.forward;
+        if(Physics.Raycast(cam.position + cam.forward, cam.forward, out hit, rayMaxDist))
         {
             target.position = hit.point + hit.normal*0.08f;
             targetForward = -hit.normal;

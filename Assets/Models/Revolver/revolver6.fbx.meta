@@ -2,7 +2,109 @@ fileFormatVersion: 2
 guid: 4f5fe87fae9520b469c281127e45c25f
 ModelImporter:
   serializedVersion: 19301
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: -7556652785739714618
+    second: Cube.001|Circle.004Action
+  - first:
+      74: -4064532029014869935
+    second: Cube.001|Cube.001Action.001
+  - first:
+      74: -503583810911536189
+    second: Cube.001|Cube.002Action.001
+  - first:
+      74: 5742391347210522988
+    second: Cube.001|CylinderAction.001
+  - first:
+      74: -6674344459079404340
+    second: Cylinder|Circle.004Action
+  - first:
+      74: 167673134512923352
+    second: Cylinder|Cube.001Action.001
+  - first:
+      74: -5623699541039495213
+    second: Cylinder|Cube.002Action.001
+  - first:
+      74: -6242241587816052237
+    second: Cylinder|CylinderAction.001
+  - first:
+      74: 2955287397051769111
+    second: Cube.002|Circle.004Action
+  - first:
+      74: 5438752550503332007
+    second: Cube.002|Cube.001Action.001
+  - first:
+      74: 6188143692413826237
+    second: Cube.002|Cube.002Action.001
+  - first:
+      74: 6104333808158994455
+    second: Cube.002|CylinderAction.001
+  - first:
+      74: -1422011007694221501
+    second: shoot
+  - first:
+      74: -1778737126097061126
+    second: Armature|Circle.004Action
+  - first:
+      74: 5922712533297259479
+    second: Armature|Cube.001Action.001
+  - first:
+      74: -7674904370128968613
+    second: Armature|Cube.002Action.001
+  - first:
+      74: 2986386761548156804
+    second: Armature|CylinderAction.001
+  - first:
+      74: -4090819288717459287
+    second: Circle.004|Circle.004Action
+  - first:
+      74: -655824339885054155
+    second: Circle.004|Cube.001Action.001
+  - first:
+      74: 5882491666727521626
+    second: Circle.004|Cube.002Action.001
+  - first:
+      74: -2936290707374673552
+    second: Circle.004|CylinderAction.001
+  - first:
+      74: -481664327978864145
+    second: idle
+  - first:
+      74: 7575242276918598809
+    second: pistolBody|Cube.001Action.001
+  - first:
+      74: -5932765486113617550
+    second: pistolBody|Cube.002Action.001
+  - first:
+      74: 8045912612684934687
+    second: pistolBody|CylinderAction.001
+  - first:
+      74: 1937596510020190215
+    second: tambor|Circle.004Action
+  - first:
+      74: 6704967612965208184
+    second: tambor|Cube.001Action.001
+  - first:
+      74: 4765100615992054952
+    second: tambor|Cube.002Action.001
+  - first:
+      74: -3658676922280385878
+    second: tambor|CylinderAction.001
+  - first:
+      74: 524906739751502204
+    second: hammer|Circle.004Action
+  - first:
+      74: -6566629038875008175
+    second: hammer|Cube.001Action.001
+  - first:
+      74: -7024237116152983363
+    second: hammer|Cube.002Action.001
+  - first:
+      74: 8060396144670095807
+    second: hammer|CylinderAction.001
+  - first:
+      74: 4065910277313914012
+    second: idle
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -12,7 +114,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleCurves: 1
+    resampleCurves: 0
     optimizeGameObjects: 0
     motionNodeName: 
     rigImportErrors: 
@@ -23,14 +125,72 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 0
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: shoot
+      takeName: Armature|ArmatureAction.001
+      internalID: 0
+      firstFrame: 1
+      lastFrame: 20
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: idle
+      takeName: Armature|ArmatureAction.001
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []
@@ -61,7 +221,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
   tangentSpace:
-    normalSmoothAngle: 30
+    normalSmoothAngle: 50
     normalImportMode: 1
     tangentImportMode: 3
     normalCalculationMode: 4

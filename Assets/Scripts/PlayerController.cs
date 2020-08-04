@@ -24,8 +24,18 @@ public class PlayerController : MonoBehaviour
     bool jumping = false;
     Vector2 axis = Vector2.zero;
 
+    [SerializeField] float standHeight = 2f;
+    [SerializeField] float crouchHeight = 1f;
+    [SerializeField] float crouchSpdMult = 0.5f;
+    bool crouch = false;
+
     CapsuleCollider cld;
     int floorLayer;
+
+    private void Awake()
+    {
+        GameManager.player = transform;
+    }
 
     private void Start()
     {
@@ -38,6 +48,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        crouch = Input.GetButton("Crouch");
+        cld.height = crouch ? crouchHeight : standHeight;
+        
         mouseXInput = Mathf.Lerp(mouseXInput, Input.GetAxis("Mouse X"), xRotLerp);
         mouseYInput = Mathf.Lerp(mouseYInput, Input.GetAxis("Mouse Y"), yRotLerp);
 
@@ -67,7 +80,7 @@ public class PlayerController : MonoBehaviour
         float degrees = yRotObj.transform.rotation.eulerAngles.x  -mouseYInput * yRotSpd;
         if(degrees < 270f && degrees > 90f) degrees = degrees > 180f ? 270f : 90f;
         yRotObj.transform.localRotation = Quaternion.Euler(degrees, 0f, 0f);
-        Vector3 spd = (transform.forward * axis.y + transform.right * axis.x) * movementSpd;
+        Vector3 spd = (transform.forward * axis.y + transform.right * axis.x) * movementSpd * (crouch ? crouchSpdMult : 1f);
         spd.y = rb.velocity.y;
         rb.velocity = Vector3.Lerp(rb.velocity, spd, movementLerp);
     }
