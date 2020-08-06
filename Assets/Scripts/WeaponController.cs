@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class WeaponController : MonoBehaviour
 {
@@ -27,6 +28,9 @@ public class WeaponController : MonoBehaviour
     [SerializeField]Material tamborMat;  
     [SerializeField] float lightIntensity = 1.8f;
     // Start is called before the first frame update
+
+    [SerializeField] UnityEvent OnShoot;
+
     void Start()
     {
         cam = Camera.main.transform;
@@ -56,9 +60,9 @@ public class WeaponController : MonoBehaviour
         newBullet.transform.LookAt(target.position);
         ammo--;
         if (ammo == 0) TurnOnOff(false);
-        loadingBullet = true;
-        loadingTime = 0f;
+        
         lastRot = tambor.localRotation;
+        OnShoot.Invoke();
     }
 
     // Update is called once per frame
@@ -69,6 +73,8 @@ public class WeaponController : MonoBehaviour
         if (Input.GetButtonDown("Fire1") && canShoot && ammo > 0 && !loadingBullet)
         {
             StartCoroutine("ShootBullet");
+            loadingBullet = true;
+            loadingTime = 0f;
             //desiredRot = Quaternion.Euler(lastRot.eulerAngles + new Vector3(0f, 0f, -60f));
             anim.SetTrigger("shoot");
             Debug.Log("shoot");
@@ -77,8 +83,7 @@ public class WeaponController : MonoBehaviour
         if (loadingBullet)
         {
             loadingTime += Time.deltaTime;
-
-            float degrees = GameManager.SmoothStep(0f, 1f, loadingTime / loadingMaxTime) * 60f;
+            float degrees = GameManager.SmoothStep(6f / 30f, 1f, loadingTime / loadingMaxTime) * 60f;
             tambor.localRotation = lastRot;
             tambor.RotateAround(tambor.position, -tambor.up, degrees);
             //cylinder.rotation = Quaternion.Lerp(lastRot, desiredRot, loadingTime / loadingMaxTime);

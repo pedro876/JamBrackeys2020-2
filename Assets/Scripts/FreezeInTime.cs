@@ -8,7 +8,8 @@ public class FreezeInTime : MonoBehaviour
     Vector3 velocity = Vector3.zero;
     Vector3 angularVelocity = Vector3.zero;
     Rigidbody rb;
-    [SerializeField] bool frozen = false;
+    [SerializeField] public bool affectRigidbody = true;
+    [SerializeField] public bool frozen = false;
     [SerializeField] UnityEvent OnFreeze;
     [SerializeField] UnityEvent OnUnFreeze;
     
@@ -16,17 +17,14 @@ public class FreezeInTime : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        if (rb)
-        {
-            if (frozen) Freeze();
-            else UnFreeze();
-        }
+        if (frozen) Freeze();
+        else UnFreeze();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (rb && !frozen)
+        if (rb && !frozen && affectRigidbody)
         {
             velocity = rb.velocity;
             angularVelocity = rb.angularVelocity;
@@ -36,8 +34,8 @@ public class FreezeInTime : MonoBehaviour
     public void Freeze()
     {
         frozen = true;
-        if(OnFreeze != null) OnFreeze.Invoke();
-        if (rb)
+        OnFreeze.Invoke();
+        if (rb && affectRigidbody)
         {
             rb.isKinematic = true;
         }
@@ -47,8 +45,8 @@ public class FreezeInTime : MonoBehaviour
     public void UnFreeze()
     {
         frozen = false;
-        if(OnUnFreeze != null) OnUnFreeze.Invoke();
-        if (rb)
+        OnUnFreeze.Invoke();
+        if (rb && affectRigidbody)
         {
             rb.isKinematic = false;
             rb.velocity = velocity;

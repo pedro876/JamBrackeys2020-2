@@ -16,11 +16,18 @@ public class WeaponShake : MonoBehaviour
     float time = 0f;
     Rigidbody rb;
 
+    [SerializeField] float frozenAngle = 0f;
+    [SerializeField] float unFrozenAngle = -65f;
+    [SerializeField] float rotLerp = 0.5f;
+    public bool timeIsFrozen { get; set; }
+
 
     private void Start()
     {
         originalPos = transform.localPosition;
         rb = GetComponentInParent<Rigidbody>();
+
+        transform.localRotation = Quaternion.Euler(unFrozenAngle, 0f, 0f);
     }
 
     private void FixedUpdate()
@@ -33,5 +40,8 @@ public class WeaponShake : MonoBehaviour
             + ((Vector3.up * Mathf.Sin(time * spd) * yRange) + (Vector3.right * Mathf.Sin(time * spd) * xRange))
             * (rbSpeed.magnitude * speedMult + 1f);
         transform.position -= rbSpeed * toRBCost;
+
+        Quaternion targetRot = Quaternion.Euler(timeIsFrozen ? frozenAngle : unFrozenAngle, 0f, 0f);
+        transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRot, rotLerp);
     }
 }

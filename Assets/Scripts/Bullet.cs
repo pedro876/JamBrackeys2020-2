@@ -37,6 +37,8 @@ public class Bullet : MonoBehaviour
             {
                 otherRb.AddForceAtPosition(transform.parent.forward * force, transform.position);
             }
+            ReactToBulletHit target = collision.gameObject.GetComponent<ReactToBulletHit>();
+            if (target) target.React();
             Destroy(transform.parent.gameObject);
         }
     }
