@@ -32,15 +32,9 @@ public class PlayerHealth : MonoBehaviour
             canBeDamaged = false;
             OnReceiveDamage.Invoke();
             currentLife--;
-            if (currentLife < 1) Die();
+            if (currentLife < 1) GameManager.Die();
             else StartCoroutine("GraceTimeCoroutine");
         }
-    }
-
-    private void Die()
-    {
-        Debug.Log("Player died");
-        //Reload scene
     }
 
     IEnumerator GraceTimeCoroutine()
