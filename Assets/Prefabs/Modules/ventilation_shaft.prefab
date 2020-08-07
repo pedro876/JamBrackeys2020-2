@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 919132149582884018}
   - component: {fileID: 919132149582884019}
   - component: {fileID: 919132149582884020}
+  - component: {fileID: 8804905130904781295}
   m_Layer: 0
   m_Name: ventilation_shaft
   m_TagString: Untagged
@@ -122,6 +123,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.96, y: 6.188883, z: 4}
   m_Center: {x: 0, y: 0, z: 1}
+--- !u!65 &8804905130904781295
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3176481385669789775}
+  m_Material: {fileID: 13400000, guid: 746f5ea6acef0814183b0384d3aeef4b, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.692904, y: 6.188883, z: 0.21258494}
+  m_Center: {x: -0.005816698, y: -4.3648835e-12, z: -3.1576476}
 --- !u!1 &3828905436425102716
 GameObject:
   m_ObjectHideFlags: 0

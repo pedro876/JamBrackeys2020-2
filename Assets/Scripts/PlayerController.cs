@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
         //walkMoveAudio.clip = crouch ? crouchWalkSound : walkingSound;
         RaycastHit hit;
 
-        bool underObj = (Physics.Raycast(transform.position, Vector3.up, out hit, Mathf.Abs(standHeight - crouchHeight + 0.1f), notPlayerLayerMask));
+        bool underObj = (Physics.Raycast(transform.position, Vector3.up, out hit, Mathf.Abs(standHeight - crouchHeight + 0.5f), notPlayerLayerMask));
 
         if (!crouch && aux)
             crouch = underObj;

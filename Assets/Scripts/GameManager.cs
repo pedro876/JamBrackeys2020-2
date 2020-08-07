@@ -7,12 +7,13 @@ public class GameManager : MonoBehaviour
 {
     public static Transform player;
     public static int level = 1;
-    static int maxLevels = 1;
+    static int maxLevels = 3;
 
     private void Awake()
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        //maxLevels = SceneManager.sceneCount - 2;
         //maxLevels = SceneManager.sceneCount - 2;
     }
 
