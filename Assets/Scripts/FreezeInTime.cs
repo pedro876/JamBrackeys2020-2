@@ -33,17 +33,18 @@ public class FreezeInTime : MonoBehaviour
 
     public void Freeze()
     {
+        //Debug.Log("freeze");
         frozen = true;
         OnFreeze.Invoke();
         if (rb && affectRigidbody)
         {
             rb.isKinematic = true;
         }
-
     }
 
     public void UnFreeze()
     {
+        //Debug.Log("unfreeze");
         frozen = false;
         OnUnFreeze.Invoke();
         if (rb && affectRigidbody)

@@ -13,6 +13,7 @@ public class EnemyController : MonoBehaviour
 
     FreezeInTime freezeInTime;
     Transform player;
+    PlayerController playerController;
     NavMeshAgent agent;
     Vector3 destination;
     [SerializeField] Transform patrolRoot;
@@ -64,7 +65,7 @@ public class EnemyController : MonoBehaviour
         if (patrolRoot == null)
         {
             patrolRoot = transform;
-            patrolRoute.Add(patrolRoot.position);
+            patrolRoute.Add(transform.position);
         }
         else
         {
@@ -74,9 +75,11 @@ public class EnemyController : MonoBehaviour
         }
         transform.position = patrolRoot.position;
         player = GameManager.player;
+        playerController = player.GetComponent<PlayerController>();
         playerLayer = LayerMask.NameToLayer("Player");
         agent = GetComponent<NavMeshAgent>();
         agent.SetDestination(transform.position);
+        destination = transform.position;
         distanceToPlayer = agent.stoppingDistance;
         ChangeState(state);
         enemyMat.SetColor("_EmissionColor", patrolColor*2.5f);
@@ -117,7 +120,6 @@ public class EnemyController : MonoBehaviour
         //Debug.Log("-----------------------");
         patrolNode = (patrolNode + 1) % patrolRoute.Count;
         agent.SetDestination(patrolRoute[patrolNode]);
-        Debug.Log("patrolNode: " + patrolNode);
     }
 
     void PatrolUpdate()
@@ -125,10 +127,34 @@ public class EnemyController : MonoBehaviour
         bool agentIsStopped = agent.remainingDistance <= 0.02f;
         anim.SetBool("walk", !agentIsStopped);
         anim.SetBool("idle", agentIsStopped);
-        if (patrolRoute.Count > 1 && agentIsStopped) PatrolNextDestiny();
-        else if (agentIsStopped)
-            transform.rotation = Quaternion.Lerp(transform.rotation, originalRot, toOriginalRotSpd * Time.deltaTime);
+        if (!CheckDetectors())
+        {
+            if (patrolRoute.Count > 1 && agentIsStopped) PatrolNextDestiny();
+            else if (agentIsStopped)
+                transform.rotation = Quaternion.Lerp(transform.rotation, originalRot, toOriginalRotSpd * Time.deltaTime);
+        }
         if (PlayerInViewRange())  ChangeState(EnemyState.shooting);
+    }
+
+    bool CheckDetectors()
+    {
+        if (Detector.pointsOfInterest.Count > 0)
+        {
+            Vector3 closest = Vector3.zero;
+            float minDistance = float.PositiveInfinity;
+            foreach(Transform t in Detector.pointsOfInterest)
+            {
+                float distance = (t.position - transform.position).magnitude;
+                if (distance < minDistance)
+                {
+                    closest = t.position;
+                    minDistance = distance;
+                }
+            }
+            agent.SetDestination(closest);
+            return true;
+        }
+        else return false;
     }
 
     #endregion
@@ -137,6 +163,8 @@ public class EnemyController : MonoBehaviour
 
     void PursuitUpdate()
     {
+        
+
         if (PlayerInViewRange())
         {
             ChangeState(EnemyState.shooting);
@@ -146,6 +174,10 @@ public class EnemyController : MonoBehaviour
             destination = GameManager.player.position;
             agent.SetDestination(destination);
         }
+
+        bool agentIsStopped = agent.remainingDistance <= 0.02f;
+        anim.SetBool("run", !agentIsStopped);
+        anim.SetBool("idle", agentIsStopped);
     }
     IEnumerator PursuitTimer()
     {
@@ -224,9 +256,9 @@ public class EnemyController : MonoBehaviour
                 agent.speed = pursuitSpd;
                 StartCoroutine("PursuitTimer");
                 agent.stoppingDistance = distanceToPlayer;
-                anim.SetBool("run", true);
+                //anim.SetBool("run", true);
                 anim.SetBool("walk", false);
-                anim.SetBool("idle", false);
+                //anim.SetBool("idle", false);
                 anim.SetBool("shoot", false);
                 break;
             case EnemyState.shooting:
@@ -259,6 +291,7 @@ public class EnemyController : MonoBehaviour
 
     private bool PlayerInViewRange()
     {
+        if (playerController.hidden) return false;
         RaycastHit hit;
         Vector3 dirToPlayer = (player.position - transform.position);
         if(Vector3.Dot(transform.forward, dirToPlayer) > viewRange &&
@@ -272,7 +305,6 @@ public class EnemyController : MonoBehaviour
 
     public void StartStopAgent(bool start)
     {
-
         if(!start) destination = agent.destination;
         agent.enabled = start;
         if (start) agent.SetDestination(destination);

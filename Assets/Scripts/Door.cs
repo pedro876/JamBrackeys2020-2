@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Door : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class Door : MonoBehaviour
     Vector3 lastPos;
     Vector3 targetPos;
 
+    [SerializeField] UnityEvent OnOpen;
+    [SerializeField] UnityEvent OnClose;
+
     private void Start()
     {
         defaultPos = transform.position;
@@ -33,6 +37,7 @@ public class Door : MonoBehaviour
         lastPos = transform.position;
         timeToChange = 0f;
         timeDif = (Mathf.Abs(transform.position.y - targetPos.y) / height) * maxTimeToOpen;
+        OnOpen.Invoke();
     }
 
     public void StartClosing()
@@ -41,12 +46,11 @@ public class Door : MonoBehaviour
         lastPos = transform.position;
         timeToChange = 0f;
         timeDif = (Mathf.Abs(transform.position.y - targetPos.y) / height) * maxTimeToOpen;
+        OnClose.Invoke();
     }
 
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.R)) StartOpening();
-        //if (Input.GetKeyDown(KeyCode.F)) StartClosing();
 
         if(timeToChange < timeDif)
         {

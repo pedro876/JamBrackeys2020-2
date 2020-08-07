@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float crouchHeight = 1f;
     [SerializeField] float crouchSpdMult = 0.5f;
     bool crouch = false;
+    public bool hidden = false;
 
     [SerializeField] float volumeLerp = 0.5f;
     //[SerializeField] AudioClip crouchWalkSound;
@@ -45,10 +46,12 @@ public class PlayerController : MonoBehaviour
 
     CapsuleCollider cld;
     int floorLayer;
+    int notPlayerLayerMask;
 
     private void Awake()
     {
         GameManager.player = transform;
+        notPlayerLayerMask = ~LayerMask.GetMask("Player", "Field");
     }
 
     private void Start()
@@ -65,6 +68,14 @@ public class PlayerController : MonoBehaviour
         bool aux = crouch;
         crouch = Input.GetButton("Crouch");
         //walkMoveAudio.clip = crouch ? crouchWalkSound : walkingSound;
+        RaycastHit hit;
+
+        bool underObj = (Physics.Raycast(transform.position, Vector3.up, out hit, Mathf.Abs(standHeight - crouchHeight + 0.1f), notPlayerLayerMask));
+
+        if (!crouch && aux)
+            crouch = underObj;
+
+        hidden = crouch && underObj;
 
         if (crouch != aux)
             if (crouch) OnCrouch.Invoke();

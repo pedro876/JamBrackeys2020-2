@@ -8,11 +8,12 @@ public class PressurePlate : MonoBehaviour
     [SerializeField] UnityEvent OnPressed;
     [SerializeField] UnityEvent OnUnpressed;
 
-    [SerializeField] Material mat;
-    [SerializeField] Color unpressedColor = Color.red;
+    [SerializeField] Material pressedMat;
+    [SerializeField] Material unPressedMat;
+    /*[SerializeField] Color unpressedColor = Color.red;
     [SerializeField] float unpressedIntensity = 1f;
     [SerializeField] Color pressedColor = Color.green;
-    [SerializeField] float pressedIntensity = 2.5f;
+    [SerializeField] float pressedIntensity = 2.5f;*/
 
     [SerializeField] Transform pressurePlateObj;
     [SerializeField] float pressedDisplacement = 0.05f;
@@ -26,11 +27,14 @@ public class PressurePlate : MonoBehaviour
     int fieldLayer;
 
     BoxCollider collider;
+    MeshRenderer renderer;
 
 
     private void Start()
     {
-        mat.SetColor("_EmissionColor", unpressedColor * unpressedIntensity);
+        renderer = GetComponentInChildren<MeshRenderer>();
+        //pressedMat.SetColor("_EmissionColor", unpressedColor * unpressedIntensity);
+        renderer.material = unPressedMat;
         defaultPos = pressurePlateObj.position;
         targetPos = defaultPos;
         fieldLayer = LayerMask.NameToLayer("Field");
@@ -44,14 +48,16 @@ public class PressurePlate : MonoBehaviour
         {
             if(objectsOver == 1)
             {
+                renderer.material = pressedMat;
                 //Debug.Log("pressed");
-                mat.SetColor("_EmissionColor", pressedColor * pressedIntensity);
+                //pressedMat.SetColor("_EmissionColor", pressedColor * pressedIntensity);
                 targetPos = defaultPos - transform.up * pressedDisplacement;
                 OnPressed.Invoke();
             } else if(objectsOver == 0)
             {
                 //Debug.Log("unpressed");
-                mat.SetColor("_EmissionColor", unpressedColor * unpressedIntensity);
+                renderer.material = unPressedMat;
+                //pressedMat.SetColor("_EmissionColor", unpressedColor * unpressedIntensity);
                 targetPos = defaultPos;
                 OnUnpressed.Invoke();
             }
