@@ -92,7 +92,7 @@ public class SlowMoSkill : MonoBehaviour
                 lastAngularVelocity = rb.angularVelocity;
                 lastVelocity = rb.velocity;
             }
-            else if (slowMoActive)
+            else if (slowMoActive && slowMoTime < (regressionE0 * slowMoMaxTime))
             {
                 slowMoTime = regressionE0 * slowMoMaxTime;
             }

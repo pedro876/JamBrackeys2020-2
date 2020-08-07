@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 742759210341662942}
   - component: {fileID: 742759210341662931}
   m_Layer: 0
-  m_Name: Lamp
+  m_Name: DoorLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 742759210341662940}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.39524007, y: 15.313617, z: -14.58278}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 0.2}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
