@@ -8,6 +8,7 @@ using UnityEngine.Events;
 public class SlowMoSkill : MonoBehaviour
 {
     [Header("Slow Motion")]
+    [HideInInspector] public bool fieldActive = false;
     [SerializeField] Transform cam;
     [SerializeField] Transform revolver;
     CapsuleCollider cld;
@@ -91,6 +92,7 @@ public class SlowMoSkill : MonoBehaviour
                 startSkill.Invoke();
                 lastAngularVelocity = rb.angularVelocity;
                 lastVelocity = rb.velocity;
+                fieldActive = true;
             }
             else if (slowMoActive && slowMoTime < (regressionE0 * slowMoMaxTime))
             {
@@ -184,6 +186,7 @@ public class SlowMoSkill : MonoBehaviour
                 rb.isKinematic = false;
                 rb.velocity = lastVelocity;
                 rb.angularVelocity = lastAngularVelocity;
+                fieldActive = false;
             }
         }
         else if (!canSlowMo)

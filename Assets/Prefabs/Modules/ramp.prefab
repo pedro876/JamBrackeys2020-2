@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3837900471586199221}
   - component: {fileID: 1343763106448532095}
   - component: {fileID: 919132148213543542}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ramp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 8129258756631763408}
   - component: {fileID: 8192769101788206981}
   - component: {fileID: 2076850631364862806}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube.003
   m_TagString: Untagged
   m_Icon: {fileID: 0}

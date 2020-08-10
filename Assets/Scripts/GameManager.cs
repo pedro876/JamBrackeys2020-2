@@ -7,12 +7,11 @@ public class GameManager : MonoBehaviour
 {
     public static Transform player;
     public static int level = 1;
-    static int maxLevels = 3;
+    static int maxLevels = 7;
 
     private void Awake()
     {
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        
         //maxLevels = SceneManager.sceneCount - 2;
         //maxLevels = SceneManager.sceneCount - 2;
     }
@@ -26,12 +25,20 @@ public class GameManager : MonoBehaviour
 
     public static void StartLevel()
     {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         SceneManager.LoadScene("Level (" + level + ")", LoadSceneMode.Single);
+    }
+
+    public void StartLevelLocal()
+    {
+        StartLevel();
     }
 
     public static void Die()
     {
         StartLevel();
+        DeathInfo.lastTimeDied = true;
     }
 
     public static void NextLevel()
@@ -39,14 +46,30 @@ public class GameManager : MonoBehaviour
         level++;
         if(level > maxLevels)
         {
-            level = 0;
-            SceneManager.LoadScene("Credits", LoadSceneMode.Single);
+            level = 1;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            //SceneManager.LoadScene("Credits", LoadSceneMode.Single);
+            ToMainMenu();
         } else StartLevel();
+    }
+
+    public void NextLevelLocal()
+    {
+        NextLevel();
     }
 
     public static void ToMainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        Destroy(GameObject.Find("music"));
+    }
+
+    public void ToMainMenuLocal()
+    {
+        ToMainMenu();
     }
 
     private void Update()
@@ -59,5 +82,11 @@ public class GameManager : MonoBehaviour
         {
             ToMainMenu();
         }
+        //if (Input.GetKeyDown(KeyCode.T)) NextLevel();
+    }
+
+    public void EndApp()
+    {
+        Application.Quit();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Detector : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class Detector : MonoBehaviour
     int fieldLayer;
 
     FreezeInTime freezeInTime;
+    [SerializeField] UnityEvent onDetection;
+    [SerializeField] UnityEvent onTimeout;
 
     private void Start()
     {
@@ -33,10 +36,16 @@ public class Detector : MonoBehaviour
             if(!freezeInTime.frozen) time += Time.deltaTime;
             if(time >= maxTime)
             {
+                onTimeout.Invoke();
                 pointsOfInterest.Remove(center);
                 renderer.material = offMat;
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        pointsOfInterest.Remove(center);
     }
 
     private void OnTriggerStay(Collider other)
@@ -45,6 +54,7 @@ public class Detector : MonoBehaviour
         time = 0f;
         if (!pointsOfInterest.Contains(center))
         {
+            onDetection.Invoke();
             pointsOfInterest.Add(center);
             renderer.material = onMat;
         }

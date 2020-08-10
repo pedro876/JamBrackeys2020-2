@@ -33,13 +33,13 @@ public class Door : MonoBehaviour
 
     public void StartOpening()
     {
-        targetPos = defaultPos - Vector3.up * height;
+        targetPos = defaultPos - Vector3.up * height * transform.localScale.z;
         lastPos = transform.position;
         timeToChange = 0f;
         timeDif = (Mathf.Abs(transform.position.y - targetPos.y) / height) * maxTimeToOpen;
         OnOpen.Invoke();
     }
-
+    
     public void StartClosing()
     {
         targetPos = defaultPos;

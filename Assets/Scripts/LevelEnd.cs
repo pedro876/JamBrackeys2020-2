@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class LevelEnd : MonoBehaviour
 {
+    SlowMoSkill slowMoSkill;
+
+    private void Start()
+    {
+        slowMoSkill = GameManager.player.GetComponent<SlowMoSkill>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        GameManager.NextLevel();
+        if(!slowMoSkill.fieldActive)
+            GameManager.NextLevel();
     }
 }

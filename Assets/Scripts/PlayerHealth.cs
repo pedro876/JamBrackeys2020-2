@@ -12,6 +12,7 @@ public class PlayerHealth : MonoBehaviour
     bool canBeDamaged = true;
     [SerializeField] float graceTime = 1f;
     [SerializeField] Slider healthSlider;
+    
     [SerializeField] float healthSliderLerp = 0.3f;
     [SerializeField] UnityEvent OnReceiveDamage;
 
@@ -32,10 +33,15 @@ public class PlayerHealth : MonoBehaviour
             canBeDamaged = false;
             OnReceiveDamage.Invoke();
             currentLife--;
-            if (currentLife < 1) GameManager.Die();
+            if (currentLife < 1)
+            {
+                GameManager.Die();
+            }
             else StartCoroutine("GraceTimeCoroutine");
         }
     }
+
+    
 
     IEnumerator GraceTimeCoroutine()
     {

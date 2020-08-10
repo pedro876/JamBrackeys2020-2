@@ -74,8 +74,12 @@ public class EnemyController : MonoBehaviour
                 for (int i = 0; i < children.Length; i++) patrolRoute.Add(children[i].position);
         }
         transform.position = patrolRoot.position;
-        player = GameManager.player;
-        playerController = player.GetComponent<PlayerController>();
+        if (GameManager.player)
+        {
+            player = GameManager.player;
+            playerController = player.GetComponent<PlayerController>();
+        }
+        
         playerLayer = LayerMask.NameToLayer("Player");
         agent = GetComponent<NavMeshAgent>();
         agent.SetDestination(transform.position);
@@ -291,6 +295,7 @@ public class EnemyController : MonoBehaviour
 
     private bool PlayerInViewRange()
     {
+        if(player == null) return false;
         if (playerController.hidden) return false;
         RaycastHit hit;
         Vector3 dirToPlayer = (player.position - transform.position);
